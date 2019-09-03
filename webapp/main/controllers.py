@@ -10,8 +10,8 @@ import subprocess
 #
 ###################################################################################
 
-victim_host = "192.168.152.205"
-struts_port = "8080"
+victim_host = $VICTIM_HOST # This environment variable is set via the terraform aws_instance.bastion_host provisioner script.
+struts_port = $STRUTS_PORT # This environment variable is set via the terraform asws_instance.bstion_host provisioner script.
 
 main_blueprint = Blueprint(
     'main',
