@@ -3,7 +3,7 @@
 
   <div class="jumbotron">
     <h1>Demo Attack Site</h1>
-      <p>Click a button to run an exploit against a target workload</p>
+    <p>Click a button to run an exploit against the target workload ({{victim_host}})</p>
   </div>
   <div>
     <div class="row">
@@ -18,7 +18,7 @@
               <td>Ping Google (8.8.8.8)</td><td> <a href="/ping" class="btn btn-primary btn-md">Execute</a> </td>
             </tr>
             <tr>
-              <td>Ping localhost (127.0.0.1)</td><td> <a href="/ping_localhost" class="btn btn-primary btn-md">Execute</a> </td>
+		    <td>Ping target workload ({{victim_host}})</td><td> <a href="/ping_target" class="btn btn-primary btn-md">Execute</a> </td>
             </tr>
             <tr>
               <td>Exploit Apache Struts Vuln and list users</td><td> <a href="/struts_list_users" class="btn btn-primary btn-md">Execute</a> </td>
