@@ -1,0 +1,9 @@
+.DS_Store
+migrations/*
+*.db
+env/*
+migrations/*
+.vscode/*
+__pycache__/
+*.pyc
+env_vars

