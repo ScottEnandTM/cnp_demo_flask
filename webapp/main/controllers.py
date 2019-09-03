@@ -1,5 +1,5 @@
 from flask import render_template, Blueprint, flash, redirect, url_for, current_app
-import subprocess
+import subprocess, os
 
 ###################################################################################
 # NOTES:
@@ -10,8 +10,8 @@ import subprocess
 #
 ###################################################################################
 
-victim_host = $VICTIM_HOST # This environment variable is set via the terraform aws_instance.bastion_host provisioner script.
-struts_port = $STRUTS_PORT # This environment variable is set via the terraform asws_instance.bstion_host provisioner script.
+victim_host = os.environ['VICTIM_HOST'] # This environment variable is set via the terraform aws_instance.bastion_host provisioner script.
+struts_port = os.environ['STRUTS_PORT'] # This environment variable is set via the terraform asws_instance.bstion_host provisioner script.
 
 main_blueprint = Blueprint(
     'main',
