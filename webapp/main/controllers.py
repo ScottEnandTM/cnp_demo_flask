@@ -9,9 +9,16 @@ import subprocess, os
 # Need to dynamically read in the value for "victim_host"
 #
 ###################################################################################
+victim_host = ''
+with open ("VICTIM_HOST.txt", "r") as configfile:
+    victim_host = configfile.read().replace('\n', '')
 
-victim_host = os.environ['VICTIM_HOST'] # This environment variable is set via the terraform aws_instance.bastion_host provisioner script.
-struts_port = os.environ['STRUTS_PORT'] # This environment variable is set via the terraform asws_instance.bstion_host provisioner script.
+#victim_host = os.environ['VICTIM_HOST'] # This environment variable is set via the terraform aws_instance.bastion_host provisioner script.
+struts_port = ''
+with open ("STRUTS_PORT.txt", "r") as configfile:
+    struts_port = configfile.read().replace('\n', '')
+
+#struts_port = os.environ['STRUTS_PORT'] # This environment variable is set via the terraform asws_instance.bstion_host provisioner script.
 
 main_blueprint = Blueprint(
     'main',
