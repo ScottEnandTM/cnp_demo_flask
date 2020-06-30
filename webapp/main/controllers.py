@@ -62,6 +62,18 @@ def ping_target():
     return render_template('struts.html', output=format_output(output))
 
 
+@main_blueprint.route('/curl_target')
+def curl_target():
+    #output = "fake output"
+    try:
+        output = subprocess.check_output(["curl", victim_host])
+        flash("The command ran successfully", category="success")
+    except subprocess.CalledProcessError as e:
+        flash("An error occurred", category="danger")
+        output = "An error occurred:\n {e}".format(e=e)
+    return render_template('struts.html', output=format_output(output))
+
+
 @main_blueprint.route('/cmd_exe') 
 def cmd_exe():
     #output = "fake output"
